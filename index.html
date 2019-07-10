@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Knight's Tour</title>
+		<link href="https://fonts.googleapis.com/css?family=Pathway+Gothic+One" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Quattrocento:400,700" rel="stylesheet">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+		<style>
+			* {
+				box-sizing: border-box;
+			}
+			body {
+				font-family: "Quattrocento", serif;
+				/* always specify font-size */
+				/* different browsers have diff. default font-size */
+				font-size: 16px;
+				color: #000;
+				background: #efd9c2 url(wood-bg.jpg);
+				background-size: cover;
+				background-repeat: no-repeat;
+				background-attachment: fixed;
+			}
+			h1 {
+				text-align: center;
+				padding-top: 2%;
+				color: #9F6541;
+			}
+			.content {
+				text-align: center;
+			}
+			button {
+				font-family: "Quattrocento", serif;
+				font-size: 1em;
+				font-weight: bold;
+				border-radius: 4px;
+				outline: none;
+				cursor: pointer;
+				border: none;
+				color: #FFF;
+				border-radius: 50%;
+				width: 40px;
+				height: 40px;
+				margin: 4px;
+				background-color: #769656;
+			}
+			button:hover {
+				box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19);
+				transition: box-shadow 0.3s;
+			}
+			label[for="resetBtn"] {
+				margin-left: 10px;
+			}
+			#chessBoard {
+				margin: auto;
+				border-spacing: 0;
+				border: 8px solid #9F6541;
+				-moz-user-select: none;
+				-webkit-user-select: none;
+				user-select: none;
+			}
+			#chessBoard td {
+				cursor: pointer;
+				position: relative;
+				padding: 0;
+				background-color: #769656;
+			}
+			#chessBoard tr:nth-child(2n+1) td:nth-child(2n+1),
+			#chessBoard tr:nth-child(2n) td:nth-child(2n) {
+				background-color: #EEEED2;
+			}
+			#chessBoard td span {
+				display: inline-flex;
+				justify-content: center;
+				align-items: center;
+				/* https://stackoverflow.com/questions/3407292/how-come-there-is-4px-of-extra-padding-appearing-under-my-a-element */
+				vertical-align: bottom; /* remove extra padding below span/img */
+			}
+			#chessBoard td span.numberCoord {
+				position: absolute;
+				top: 5%;
+				left: 5%;
+				z-index: 2;
+				color: #769656;
+				font-size: 0.9em;
+			}
+			#chessBoard td span.numberCoord-even {
+				color: #EEEED2;
+			}
+			#chessBoard td span.letterCoord {
+				position: absolute;
+				bottom: 5%;
+				right: 5%;
+				z-index: 2;
+				color: #EEEED2;
+				font-size: 0.9em;
+			}
+			#chessBoard td span.letterCoord-even {
+				color: #769656;
+			}
+			#knight {
+				display: none;
+				position: absolute;
+			}
+		</style>
+	</head>
+	<body>
+
+		<h1>Knight's Tour</h1>
+
+		<div class="content">
+			<label for="resetBtn">Reset knight: </label><button id="resetBtn" title="Reset knight's tour"><i class="fas fa-redo"></i></button>
+			<p>Click any cell on the board to start a tour:</p>
+		</div>
+		
+		<div id="result"></div>
+
+		<img id="knight" src="chess_knight.svg" alt="Knight">
+
+		<script src="script.js"></script>
+	</body>
+</html>
