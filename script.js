@@ -130,8 +130,8 @@ function resetKnight() {
 /*** Algorithm for Knight's tour problem using Warnsdorff's rule ***/
 /* https://www.geeksforgeeks.org/warnsdorffs-algorithm-knights-tour-problem/ */
 /* We can start from any initial position of the knight on the board. We always move to an adjacent, unvisited square with minimal degree (minimum number of unvisited adjacent). */
-let x0, y0; // initial coords
-let x, y; // current coordinates of the knight
+let x0, y0; // initial coordinates
+let x, y; // current coords of the knight
 // possible 8 moves (coords difference along X and Y axes)
 let dx = [1, 1, 2, 2, -1, -1, -2, -2];
 let dy = [2, -2, 1, -1, 2, -2, 1, -1];
