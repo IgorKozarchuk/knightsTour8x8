@@ -46,7 +46,7 @@ function drawBoard() {
 				if (i & 1) { // if row is odd
 					number.classList.add("numberCoord-even");
 				}
-				number.innerHTML = i+1;
+				number.innerHTML = N - i;
 				row.cells[j].appendChild(number);
 			}
 			// 2) add letters
