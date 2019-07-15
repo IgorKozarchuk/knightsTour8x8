@@ -184,7 +184,6 @@ function showMoves(board) {
 				counter++;
 				go(counter);
 			}, speed);
-			
 		}
 	}
 	go(0);
