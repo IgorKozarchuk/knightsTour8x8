@@ -4,6 +4,7 @@ const knight = document.getElementById("knight");
 const resetBtn = document.getElementById("resetBtn");
 let chessBoard;
 const N = 8; // board size
+const Nsqr = N * N;
 const coordLetters = "abcdefgh";
 let cellsArr = [];
 let tourMoves = [];
@@ -20,7 +21,7 @@ window.onload = function() {
 
 resetBtn.addEventListener("click", resetKnight);
 
-// draw chess board
+// draw chess board (main interface function)
 function drawBoard() {
 	// if board already exists redraw it
 	chessBoard = document.getElementById("chessBoard");
@@ -85,7 +86,7 @@ function drawBoard() {
 	}
 }
 
-// set board size
+// set board size and knight width
 function setBoardSize(board, size) {
 	let windowWidth = document.documentElement.clientWidth;
 	let cellSize = windowWidth * 0.85 / size;
@@ -127,94 +128,7 @@ function resetKnight() {
 	}
 }
 
-/*** Algorithm for Knight's tour problem using Warnsdorff's rule ***/
-/* https://www.geeksforgeeks.org/warnsdorffs-algorithm-knights-tour-problem/ */
-/* We can start from any initial position of the knight on the board. We always move to an adjacent, unvisited square with minimal degree (minimum number of unvisited adjacent). */
-let x0, y0; // initial coordinates
-let x, y; // current coords of the knight
-// possible 8 moves (coords difference along X and Y axes)
-let dx = [1, 1, 2, 2, -1, -1, -2, -2];
-let dy = [2, -2, 1, -1, 2, -2, 1, -1];
-
-// Knight's tour (x0, y0 - initial position)
-function knightsTour(N=8, x0=0, y0=0) {
-	// filling up the chessboard matrix with -1
-	// -1 - not visited, 1...N*N - visited
-	let board = [];
-	let Nsqr = N * N;
-	for (let i = 0; i < Nsqr; i++) {
-		board[i] = -1;
-	}
-	// current coords are same as initial position
-	x = x0;
-	y = y0;
-	// mark first move ([y*N + x] represents board as 1D array)
-	board[y*N + x] = 1;
-	// keep picking next move using Warnsdorff's heuristic
-	for (let i = 0; i < Nsqr-1; i++) {
-		nextMove(board);
-	}
-	
-	return board;
-}
-
-// pick next move using Warnsdorff's heuristic
-function nextMove(board) {
-	let minDegIndex = -1;
-	let minDeg = N + 1;
-	let nx, ny; // new x and y coords after a move
-	let deg; // degree
-	let start = 0; // adjacent cell to start selecting
-	// find the adjacent with minimum degree
-	for (let count = 0; count < N; count++) {
-		let i = (start + count) % N; // degree index
-		nx = x + dx[i];
-		ny = y + dy[i];
-
-		if ((isEmpty(board, nx, ny)) && (deg = getDegree(board, nx, ny)) < minDeg) {
-			minDegIndex = i;
-			minDeg = deg;
-		}
-	}
-	// if next position not found
-	if (minDegIndex == -1) return false;
-	// store coords of next position
-	nx = x + dx[minDegIndex];
-	ny = y + dy[minDegIndex];
-	// mark next move
-	board[ny*N + nx] = board[y*N + x] + 1;
-	// update next position
-	x = nx;
-	y = ny;
-
-	return true;
-}
-
-// check whether a cell is valid and not visited
-function isEmpty(board, x, y) {
-	return (limits(x, y) && (board[y*N + x] < 0));
-}
-
-// restrict the knight to remain within the chessboard
-function limits(x, y) {
-	return (x >= 0 && y >= 0) && (x < N && y < N);
-}
-
-// number of empty cells adjacent to (x, y)
-function getDegree(board, x, y) {
-	let degree = 0;
-
-	for (let i = 0; i < N; i++) {
-		let x1 = x + dx[i];
-		let y1 = y + dy[i];
-		if (isEmpty(board, x1, y1)) degree++;
-	}
-
-	return degree;
-}
-/*** End of algorithm for Knight's tour ***/
-
-// contains order of moves and coords of every cell
+// order of moves and coords of every cell
 function Cell(x, y, n) {
 	this.x = x; // x coordinate of the cell
 	this.y = y; // y coordinate
@@ -223,7 +137,6 @@ function Cell(x, y, n) {
 
 // write moves
 function writeMoves() {
-	const Nsqr = N * N;
 	for (let i = 0; i < Nsqr; i++) {
 		cellsArr[i].n = tourMoves[i];
 	}
@@ -286,3 +199,95 @@ function getCoords(elem) {
 		left: parseInt(box.left + pageXOffset + elem.clientHeight / 2)
 	};
 }
+
+/*** Algorithm for Knight's tour problem using Warnsdorff's rule ***/
+/* https://www.geeksforgeeks.org/warnsdorffs-algorithm-knights-tour-problem */
+/* We can start from any initial position of the knight on the board.
+We always move to adjacent unvisited square with minimal degree (minimum number of unvisited adjacent) */
+let x0, y0; // initial coordinates
+let x, y; // current coords of the knight
+// possible 8 moves (coords difference along X and Y axes)
+const dx = [1, 1, 2, 2, -1, -1, -2, -2];
+const dy = [2, -2, 1, -1, 2, -2, 1, -1];
+const D = dx.length;
+
+// Knight's tour (x0, y0 - initial position)
+function knightsTour(N=8, x0=0, y0=0) {
+	// filling up the chessboard matrix with -1
+	// -1 - not visited, 1...N*N - visited
+	let board = [];
+	for (let i = 0; i < Nsqr; i++) {
+		board[i] = -1;
+	}
+	// current coords are same as initial position
+	x = x0;
+	y = y0;
+	// mark first move ([y*N + x] represents board as 1D array)
+	board[y*N+x] = 1;
+	// keep picking next move using Warnsdorff's heuristic
+	for (let i = 0; i < Nsqr-1; i++) {
+		nextMove(board);
+	}
+	
+	return board;
+}
+
+// pick next move using Warnsdorff's heuristic
+function nextMove(board) {
+	let minDegIndex = -1; // index of a move with min degree
+	let minDeg = D + 1; // minimum degree
+	let deg; // current degree
+	let nx, ny; // new x and y coords after a move
+	// random starting point (0...7) for selecting cell with minimum degree
+	let start = Math.floor(Math.random() * D);
+	// find the adjacent cell with minimum degree
+	for (let count = 0; count < D; count++) {
+		/* index in arrays of possible moves
+		e.g. i=1 -> dx=1, dy=-2
+		(current minDegIndex) */
+		let i = (start + count) % D;
+		nx = x + dx[i];
+		ny = y + dy[i];
+
+		if (isEmpty(board, nx, ny) && (deg = getDegree(board, nx, ny)) < minDeg) {
+			minDegIndex = i;
+			minDeg = deg;
+		}
+	}
+	// if next position not found
+	if (minDegIndex === -1) return false;
+	// store coords of next position
+	nx = x + dx[minDegIndex];
+	ny = y + dy[minDegIndex];
+	// mark next move
+	board[ny*N+nx] = board[y*N+x] + 1;
+	// update next position
+	x = nx;
+	y = ny;
+
+	return true;
+}
+
+// check whether a cell is valid and not visited
+function isEmpty(board, x, y) {
+	return (limits(x, y) && (board[y*N+x] < 0));
+}
+
+// restrict the knight to remain within the chessboard
+function limits(x, y) {
+	return (x >= 0 && y >= 0) && (x < N && y < N);
+}
+
+// number of empty cells adjacent to (x, y)
+function getDegree(board, x, y) {
+	let degree = 0;
+
+	for (let i = 0; i < D; i++) {
+		let x1 = x + dx[i];
+		let y1 = y + dy[i];
+		if (isEmpty(board, x1, y1)) degree++;
+	}
+
+	return degree;
+}
+/*** End of algorithm for Knight's tour ***/
