@@ -121,10 +121,10 @@ function resetKnight() {
 	knight.style.display = "none";
 	knight.style.transition = "none"; // to avoid jumping into from previous position
 	tourMoves = []; // reset moves
-	// reset cells
-	let cells = chessBoard.querySelectorAll("SPAN:not(.letterCoord):not(.numberCoord)");
-	for (let i = 0; i < cells.length; i++) {
-		cells[i].innerHTML = "";
+	// reset cells text
+	let cellSpans = chessBoard.querySelectorAll("SPAN:not(.letterCoord):not(.numberCoord)");
+	for (let i = 0; i < cellSpans.length; i++) {
+		cellSpans[i].innerHTML = "";
 	}
 }
 
@@ -147,12 +147,12 @@ function getCellsCoords(board) {
 	if (!board) return;
 	let coords = [];
 	// get all cell spans except the ones with coords
-	let cells = board.querySelectorAll("SPAN:not(.letterCoord):not(.numberCoord)");
+	let cellSpans = board.querySelectorAll("SPAN:not(.letterCoord):not(.numberCoord)");
 	
-	for (let i = 0; i < cells.length; i++) {
+	for (let i = 0; i < cellSpans.length; i++) {
 		coords.push({
-				x: getCoords(cells[i]).left,
-				y: getCoords(cells[i]).top,
+				x: getCoords(cellSpans[i]).left,
+				y: getCoords(cellSpans[i]).top,
 			}
 		);
 		cellsArr.push(new Cell(coords[i].x, coords[i].y));
@@ -164,29 +164,31 @@ function getCellsCoords(board) {
 // show moves in cells
 function showMoves(board) {
 	// get all cell spans except the ones with coords
-	let cells = board.querySelectorAll("SPAN:not(.letterCoord):not(.numberCoord)");
+	let cellSpans = board.querySelectorAll("SPAN:not(.letterCoord):not(.numberCoord)");
 	let knightXOffset = knight.clientWidth / 2;
 	let knightYOffset = knight.clientHeight / 2;
 	// set transition
 	knight.style.transition = "all " + speed + "ms ease";
 	
-	function go(counter) {
-		if (counter < cells.length) {
-			timerId = setTimeout(function() {
-				let objCurrent = cellsArr.find(o => o.n === counter+1);
-				let objNext = cellsArr.find(o => o.n === counter+2);
-				if (!objNext) return;
-				// show moves starting from 2nd position
-				knight.style.left = objNext.x - knightXOffset + "px";
-				knight.style.top = objNext.y - knightYOffset + "px";
-				// write move number
-				cells[cellsArr.indexOf(objCurrent)].innerHTML = objCurrent.n;
-				counter++;
-				go(counter);
-			}, speed);
+	let counter = 0;
+	
+	timerId = setInterval(function() {
+		if (counter < Nsqr) {
+			// show moves starting from 2nd position
+			let objCurrent = cellsArr.find(o => o.n === counter+1);
+			let objNext = cellsArr.find(o => o.n === counter+2);
+			if (!objNext) return;
+			// show moves starting from 2nd position
+			knight.style.left = objNext.x - knightXOffset + "px";
+			knight.style.top = objNext.y - knightYOffset + "px";
+			// write move number
+			cellSpans[cellsArr.indexOf(objCurrent)].innerHTML = objCurrent.n;
+			counter++;
+		} else {
+			clearInterval(timerId);
+			return;
 		}
-	}
-	go(0);
+	}, speed);
 }
 
 // get coordinates in document of element's center 
