@@ -94,6 +94,7 @@ label[for="resetBtn"] {
 #knight {
 	display: none;
 	position: absolute;
+	z-index: 9;
 }
 
 @media screen and (max-width: 600px) {

@@ -4,8 +4,7 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Knight's Tour</title>
-		<link href="https://fonts.googleapis.com/css?family=Pathway+Gothic+One" rel="stylesheet">
-		<link href="https://fonts.googleapis.com/css?family=Quattrocento:400,700" rel="stylesheet">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Quattrocento:400,700">
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 		<link rel="stylesheet" href="style.css">
 	</head>
@@ -15,12 +14,12 @@
 
 		<div class="content">
 			<label for="resetBtn">Reset knight: </label><button id="resetBtn" title="Reset knight's tour"><i class="fas fa-redo"></i></button>
-			<p>Click any cell on the board to start a tour:</p>
+			<p>Click any square on the board to start a tour:</p>
 		</div>
 		
-		<div id="result"></div>
-
-		<img id="knight" src="chess_knight.svg" alt="Knight">
+		<div id="result">
+			<img id="knight" src="chess_knight.svg" alt="Knight">
+		</div>
 
 		<script src="script.js"></script>
 	</body>
